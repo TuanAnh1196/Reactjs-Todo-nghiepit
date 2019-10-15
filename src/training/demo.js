@@ -6,12 +6,12 @@ import myReducer from './reducers/index';
 
 const store = createStore(myReducer);
 
-console.log('default:',store.getState()); 
+// console.log('default:',store.getState()); 
 
 //Thay doi status 
 store.dispatch(status());
 
-console.log('action: ',store.getState()); 
+// console.log('action: ',store.getState()); 
 
 //sap xep Ten Z-A
 store.dispatch(sort(sort({
@@ -19,4 +19,4 @@ store.dispatch(sort(sort({
     value: -1
 })));
 
-console.log('sortaction: ',store.getState()); 
+// console.log('sortaction: ',store.getState()); 

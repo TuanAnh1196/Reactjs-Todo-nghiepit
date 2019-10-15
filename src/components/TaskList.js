@@ -1,5 +1,6 @@
 import React from 'react';
 import TaskItem from './TaskItem';
+import { connect } from 'react-redux';
 
 class TaskList extends React.Component {
 
@@ -25,6 +26,8 @@ class TaskList extends React.Component {
     }
 
     render() {
+        console.log(this.props.todos);
+        
         const { tasks } = this.props;
         const elmTasks = tasks.map((item, index) => {
             return <TaskItem
@@ -80,4 +83,10 @@ class TaskList extends React.Component {
 
 }
 
-export default TaskList;
+const mapStateToProps = (state) => {
+    return {
+        tasks: state.tasks
+    }
+}
+
+export default connect(mapStateToProps, null)(TaskList);
