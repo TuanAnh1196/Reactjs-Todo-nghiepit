@@ -26,8 +26,6 @@ class TaskList extends React.Component {
     }
 
     render() {
-        console.log(this.props.todos);
-        
         const { tasks } = this.props;
         const elmTasks = tasks.map((item, index) => {
             return <TaskItem

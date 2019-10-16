@@ -3,14 +3,11 @@ import './App.css';
 import TaskForm from './components/TaskForm';
 import Control from './components/Control';
 import TaskList from './components/TaskList';
-import demo from './training/demo'; 
- 
 class App extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            tasks: [],
             isDisplayForm: false,
             taskEditting: null,
             filter: {
@@ -20,15 +17,7 @@ class App extends React.Component {
             keyword: ""
         }
     }
-    // //khi load lai trang thi function dc call
-    componentWillMount() {
-        if (localStorage && localStorage.getItem('tasks')) {
-            var tasks = JSON.parse(localStorage.getItem('tasks'));
-            this.setState({
-                tasks: tasks
-            })
-        }
-    }
+   
     //tao du lieu dau 
     onGenerateData = () => {
         var tasks = [
@@ -150,44 +139,50 @@ class App extends React.Component {
     }
 
     render() {
-        let { tasks, isDisplayForm, taskEditting, filter, keyword, sort } = this.state;
+        let { 
+            isDisplayForm,
+            taskEditting,
+            // filter,
+            // keyword, 
+            sort 
+            } = this.state;
         
-        if(filter){
-            if (filter.name) {
-                tasks = tasks.filter((task) => {
-                    return task.name.toLowerCase().indexOf(filter.name) !== -1;
-                });
-            }
-            tasks = tasks.filter((task) => {
-                if (filter.status === -1) { //lay tat ca
-                    return tasks;
-                } else { // status: 1 la lay kick hoat
-                    return task.status === (filter.status === 1 ? true : false)
-                }
-            });
-        }
+        // if(filter){
+        //     if (filter.name) {
+        //         tasks = tasks.filter((task) => {
+        //             return task.name.toLowerCase().indexOf(filter.name) !== -1;
+        //         });
+        //     }
+        //     tasks = tasks.filter((task) => {
+        //         if (filter.status === -1) { //lay tat ca
+        //             return tasks;
+        //         } else { // status: 1 la lay kick hoat
+        //             return task.status === (filter.status === 1 ? true : false)
+        //         }
+        //     });
+        // }
 
-        if(keyword){
-            tasks = tasks.filter((task) => {
-                return task.name.toLowerCase().indexOf(keyword) !== -1;
-            });
-        }
+        // if(keyword){
+        //     tasks = tasks.filter((task) => {
+        //         return task.name.toLowerCase().indexOf(keyword) !== -1;
+        //     });
+        // }
 
-        if(sort){
-            if(sort.by==='name'){
-                tasks.sort((a,b)=>{
-                    if(a.name > b.name) return sort.value;
-                    else if(a.name <b.name) return -sort.value;
-                    else return 0;
-                })
-            }else{
-                tasks.sort((a,b)=>{
-                    if(a.status > b.status) return -sort.value;
-                    else if(a.status <b.status) return sort.value;
-                    else return 0;
-                })
-            }
-        }
+        // if(sort){
+        //     if(sort.by==='name'){
+        //         tasks.sort((a,b)=>{
+        //             if(a.name > b.name) return sort.value;
+        //             else if(a.name <b.name) return -sort.value;
+        //             else return 0;
+        //         })
+        //     }else{
+        //         tasks.sort((a,b)=>{
+        //             if(a.status > b.status) return -sort.value;
+        //             else if(a.status <b.status) return sort.value;
+        //             else return 0;
+        //         })
+        //     }
+        // }
         
         
         const elmTaskForm = isDisplayForm === true ?
@@ -246,4 +241,6 @@ class App extends React.Component {
 
 }
 
-export default App;
+
+
+export default  App;

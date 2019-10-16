@@ -1,4 +1,7 @@
 import React from 'react';
+import * as actions from './../actions/index';
+import {connect} from 'react-redux';
+
 
 class TaskForm extends React.Component {
     constructor(props) {
@@ -47,8 +50,8 @@ class TaskForm extends React.Component {
     }
 
     onSubmit = (event) => {
-        event.preventDefault(); //ko load trang 
-        this.props.onSubmit(this.state);//gui sang app.js
+        event.preventDefault(); //ko load trang
+        this.props.onAddTask(this.state); 
         //after submit cancer and close form
         this.onClear();
         this.onCloseForm();
@@ -118,4 +121,16 @@ class TaskForm extends React.Component {
 
 }
 
-export default TaskForm;
+const mapStateToProps = (state)=>{
+    return {
+
+    }
+};
+const mapDispatchToProps = (dispatch, props)=>{
+    return {
+        onAddTask: (task)=>{
+            dispatch(actions.addTask(task));
+        }
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(TaskForm);
