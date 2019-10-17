@@ -1,13 +1,19 @@
 import React from 'react';
+import * as actions from './../actions/index';
+import {connect} from 'react-redux';
+
 
 class TaskItem extends React.Component {
+
 
     onUpdateStatus = () => {
         this.props.onUpdateStatus(this.props.task.id);
     }
 
-    onDelete = () => {
-        this.props.onDelete(this.props.task.id);
+    onDeleteItem = () => {
+        this.props.onDeleteTask(this.props.task.id);
+        this.props.onCloseForm();
+
     }
     onUpdate = () => {
         this.props.onUpdate(this.props.task.id);
@@ -40,7 +46,7 @@ class TaskItem extends React.Component {
                     <button
                         type="button"
                         className="btn btn-danger"
-                        onClick={this.onDelete}
+                        onClick={this.onDeleteItem}
                     >
                         <span className="fa fa-trash mr-5"></span>Xóa
                     </button>
@@ -50,5 +56,22 @@ class TaskItem extends React.Component {
     }
 
 }
-
-export default TaskItem;
+const mapStateToProps = (state)=>{
+    return {
+        state: state,
+    }
+};
+const mapDispatchToProps = (dispatch, props)=>{
+    return {
+        onUpdateStatus: (id)=>{
+            dispatch(actions.updateStatus(id));
+        },
+        onDeleteTask: (id)=>{
+            dispatch(actions.deleteTask(id));
+        },
+        onCloseForm: ()=>{
+            dispatch(actions.closeForm());
+        }
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(TaskItem);

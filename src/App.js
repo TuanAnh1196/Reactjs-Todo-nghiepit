@@ -3,12 +3,13 @@ import './App.css';
 import TaskForm from './components/TaskForm';
 import Control from './components/Control';
 import TaskList from './components/TaskList';
+import { connect } from 'react-redux';
+import * as actions from './actions/index'
 class App extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            isDisplayForm: false,
             taskEditting: null,
             filter: {
                 name: "",
@@ -17,7 +18,6 @@ class App extends React.Component {
             keyword: ""
         }
     }
-   
     //tao du lieu dau 
     onGenerateData = () => {
         var tasks = [
@@ -34,51 +34,9 @@ class App extends React.Component {
     }
 
     onToggleForm = () => {
-        this.setState({
-            isDisplayForm: !this.state.isDisplayForm,
-        });
+        this.props.onToggleForm(); 
     }
-    // kick nut x dong form 
-    onCloseForm = () => {
-        this.setState({
-            isDisplayForm: false,
-
-        });
-    }
-    //them du lieu 
-    onSubmit = (data) => {
-        // console.log(data);
-        let { tasks } = this.state;
-        if (data.id === '') { //them thi id  ='' 
-            let item = {
-                id: 1 + (Math.random() * (1000 - 1)),
-                name: data.name,
-                status: data.status
-            }
-            tasks.push(item);
-        } else { //sua 
-            let index = this.findIndex(data.id);
-            tasks[index] = data;
-        }
-        this.setState({
-            tasks: tasks,
-            taskEditting: null //xoa bien de bam nut them dc
-
-        });
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-    }
-    //kick status thi toggle status
-    onUpdateStatus = (id) => {
-        let { tasks } = this.state;
-        let index = this.findIndex(id);
-        if (index !== -1) {
-            tasks[index].status = !tasks[index].status;
-            this.setState({
-                tasks: tasks
-            });
-            localStorage.setItem('tasks', JSON.stringify(tasks));
-        }
-    }
+   
     //find index to change status 
     findIndex = (id) => {
         let { tasks } = this.state;
@@ -89,19 +47,6 @@ class App extends React.Component {
             }
         });
         return result;
-    }
-    // delete record
-    onDelete = (id) => {
-        let { tasks } = this.state;
-        //tra ve mang moi remove object co id = id 
-        let newTasks = tasks.filter((task) => {
-            return task.id !== id;
-        });
-        this.setState({
-            tasks: newTasks
-        });
-        localStorage.setItem('tasks', JSON.stringify(newTasks));
-        this.onCloseForm();
     }
 
     onUpdate = (id) => {
@@ -124,71 +69,31 @@ class App extends React.Component {
         });
     }
 
-    onSearch =(keyword)=>{
-        
+    onSearch = (keyword) => {
+
         this.setState({
             keyword: keyword.toLowerCase(),
         });
 
     }
 
-    onSort = (sort)=>{
+    onSort = (sort) => {
         this.setState({
             sort: sort
         });
     }
 
     render() {
-        let { 
-            isDisplayForm,
+        let {
             taskEditting,
             // filter,
             // keyword, 
-            sort 
-            } = this.state;
-        
-        // if(filter){
-        //     if (filter.name) {
-        //         tasks = tasks.filter((task) => {
-        //             return task.name.toLowerCase().indexOf(filter.name) !== -1;
-        //         });
-        //     }
-        //     tasks = tasks.filter((task) => {
-        //         if (filter.status === -1) { //lay tat ca
-        //             return tasks;
-        //         } else { // status: 1 la lay kick hoat
-        //             return task.status === (filter.status === 1 ? true : false)
-        //         }
-        //     });
-        // }
+            sort
+        } = this.state;
+        var {isDisplayForm} = this.props;
 
-        // if(keyword){
-        //     tasks = tasks.filter((task) => {
-        //         return task.name.toLowerCase().indexOf(keyword) !== -1;
-        //     });
-        // }
-
-        // if(sort){
-        //     if(sort.by==='name'){
-        //         tasks.sort((a,b)=>{
-        //             if(a.name > b.name) return sort.value;
-        //             else if(a.name <b.name) return -sort.value;
-        //             else return 0;
-        //         })
-        //     }else{
-        //         tasks.sort((a,b)=>{
-        //             if(a.status > b.status) return -sort.value;
-        //             else if(a.status <b.status) return sort.value;
-        //             else return 0;
-        //         })
-        //     }
-        // }
-        
-        
         const elmTaskForm = isDisplayForm === true ?
             <TaskForm
-                onSubmit={this.onSubmit}
-                onCloseForm={this.onCloseForm}
                 task={taskEditting}
             /> : '';
         return (
@@ -217,17 +122,15 @@ class App extends React.Component {
                         >
                             Generate Data
                         </button>
-                        <Control 
-                            onSearch={this.onSearch} 
+                        <Control
+                            onSearch={this.onSearch}
                             onSort={this.onSort}
                             sortCallback={sort}
-                            />
+                        />
                         <div className="row mt-15">
                             <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <TaskList
                                     // tasks={tasks}
-                                    onUpdateStatus={this.onUpdateStatus}
-                                    onDelete={this.onDelete}
                                     onUpdate={this.onUpdate}
                                     onFilter={this.onFilter}
                                 />
@@ -241,6 +144,18 @@ class App extends React.Component {
 
 }
 
+const mapStateToProps = (state) => {
+    return {
+        isDisplayForm: state.isDisplayForm,
+    };
+};
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        onToggleForm: ()=>{
+            dispatch(actions.toggleForm());
+        },
+        
+    };
+};
 
-
-export default  App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);
