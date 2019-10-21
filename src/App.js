@@ -7,53 +7,26 @@ import { connect } from 'react-redux';
 import * as actions from './actions/index'
 class App extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            taskEditting: null,
-        }
+    onToggleForm = ()=>{
+        var {itemEditting} = this.props;
+        this.props.onToggleForm();
     }
 
-    // onToggleForm = ()=>{
-    //     var {itemEditting} = this.props;
-    //     if(itemEditting && itemEditting!==''){
-    //         this.props.o
-    //     }
+    // //tao du lieu dau 
+    // onGenerateData = () => {
+    //     var tasks = [
+    //         {
+    //             id: 1,
+    //             name: 'Hoc Lap Trinh',
+    //             status: true
+    //         },
+    //     ];
+    //     this.setState({
+    //         tasks: tasks
+    //     })
+    //     localStorage.setItem('tasks', JSON.stringify(tasks));
     // }
-
-    //tao du lieu dau 
-    onGenerateData = () => {
-        var tasks = [
-            {
-                id: 1,
-                name: 'Hoc Lap Trinh',
-                status: true
-            },
-        ];
-        this.setState({
-            tasks: tasks
-        })
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-    }
-
-    onUpdate = (id) => {
-        let { tasks } = this.state;
-        let index = this.findIndex(id);
-        let taskEditting = tasks[index];// object task muốn sửa 
-        this.setState({
-            taskEditting: taskEditting
-        });
-        this.onToggleForm();
-    }
-
-    onSort = (sort) => {
-        this.setState({
-            sort: sort
-        });
-    }
-
     render() {
-        let { sort } = this.state;
         var { isDisplayForm } = this.props;
 
         return (
@@ -101,6 +74,7 @@ class App extends React.Component {
 const mapStateToProps = (state) => {
     return {
         isDisplayForm: state.isDisplayForm,
+        itemEditting: state.itemEditting
     };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -108,6 +82,7 @@ const mapDispatchToProps = (dispatch, props) => {
         onToggleForm: () => {
             dispatch(actions.toggleForm());
         },
+       
         onClearTask: (task) => {
             dispatch(actions.editTask());
         },

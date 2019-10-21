@@ -76,7 +76,6 @@ const mapDispatchToProps = (dispatch, props)=>{
         },
         onOpenForm: ()=>{
             dispatch(actions.openForm());
-
         },
         onEditTask: (task)=>{
             dispatch(actions.editTask(task));
