@@ -11,11 +11,6 @@ class App extends React.Component {
         super(props);
         this.state = {
             taskEditting: null,
-            filter: {
-                name: "",
-                status: -1
-            },
-            keyword: ""
         }
     }
     //tao du lieu dau 
@@ -33,23 +28,6 @@ class App extends React.Component {
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }
 
-    onToggleForm = () => {
-        this.props.onToggleForm(); 
-       
-    }
-   
-    //find index to change status 
-    findIndex = (id) => {
-        let { tasks } = this.state;
-        let result = -1;
-        tasks.forEach((task, index) => {
-            if (task.id === id) {
-                result = index;
-            }
-        });
-        return result;
-    }
-
     onUpdate = (id) => {
         let { tasks } = this.state;
         let index = this.findIndex(id);
@@ -60,24 +38,6 @@ class App extends React.Component {
         this.onToggleForm();
     }
 
-    onFilter = (filterName, filterStatus) => {
-        filterStatus = parseInt(filterStatus);
-        this.setState({
-            filter: {
-                name: filterName.toLowerCase(),
-                status: filterStatus
-            }
-        });
-    }
-
-    onSearch = (keyword) => {
-
-        this.setState({
-            keyword: keyword.toLowerCase(),
-        });
-
-    }
-
     onSort = (sort) => {
         this.setState({
             sort: sort
@@ -85,10 +45,8 @@ class App extends React.Component {
     }
 
     render() {
-        let {
-            sort
-        } = this.state;
-        var {isDisplayForm} = this.props;
+        let { sort } = this.state;
+        var { isDisplayForm } = this.props;
 
         return (
             <div className="container">
@@ -98,7 +56,7 @@ class App extends React.Component {
                 </div>
                 <div className="row">
                     <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                    <TaskForm />
+                        <TaskForm />
                     </div>
                     <div className={isDisplayForm === true ? 'col-xs-8 col-sm-8 col-md-8 col-lg-8' :
                         'col-xs-12 col-sm-12 col-md-12 col-lg-12'}>
@@ -116,17 +74,11 @@ class App extends React.Component {
                         >
                             Generate Data
                         </button>
-                        <Control
-                            onSearch={this.onSearch}
-                            onSort={this.onSort}
-                            sortCallback={sort}
-                        />
+                        <Control />
                         <div className="row mt-15">
                             <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <TaskList
-                                    // tasks={tasks}
                                     onUpdate={this.onUpdate}
-                                    onFilter={this.onFilter}
                                 />
                             </div>
                         </div>
@@ -145,13 +97,13 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        onToggleForm: ()=>{
+        onToggleForm: () => {
             dispatch(actions.toggleForm());
         },
-        onClearTask: (task)=>{
+        onClearTask: (task) => {
             dispatch(actions.editTask());
         },
-        
+
     };
 };
 

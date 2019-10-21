@@ -19,8 +19,8 @@ class TaskList extends React.Component {
         let value = target.value;
         let name = target.name;
         var filter = {
-            name: name === 'filterName'?value:this.state.filterName,
-            status: name ==='filterStatus'?value:this.state.filterStatus
+            name: name === 'filterName' ? value : this.state.filterName,
+            status: name === 'filterStatus' ? value : this.state.filterStatus
         };
         this.props.onFilterTable(filter);
         this.setState({
@@ -29,9 +29,33 @@ class TaskList extends React.Component {
     }
 
     render() {
-        const { tasks,filterTable } = this.props;
-        console.log(filterTable);
+        let { tasks, filterTable,keyword,sort } = this.props;
+        //filter on table 
+        if (filterTable.name) {
+            tasks = tasks.filter((task) => {
+                return task.name.toLowerCase().indexOf(filterTable.name) !== -1;
+            });
+        }
+        if (filterTable) {
+            tasks = tasks.filter((task) => {
+                if (filterTable.status === -1) { //lay tat ca
+                    return tasks;
+                } else { // status: 1 la lay kick hoat
+                    return task.status === (filterTable.status === 1 ? true : false)
+                }
+            });
+           
+        }
         
+        //search 
+        if(keyword){
+            tasks = tasks.filter((task) => {
+                return task.name.toLowerCase().indexOf(keyword) !== -1;
+            });
+        } 
+
+        //sort 
+
         const elmTasks = tasks.map((item, index) => {
             return <TaskItem
                 key={item.id}
@@ -40,6 +64,7 @@ class TaskList extends React.Component {
                 onUpdate={this.props.onUpdate}
             />
         });
+        
         return (
             <table className="table table-bordered table-hover mt-15">
                 <thead>
@@ -87,7 +112,9 @@ class TaskList extends React.Component {
 const mapStateToProps = (state) => {
     return {
         tasks: state.tasks,
-        filterTable: state.filterTable
+        filterTable: state.filterTable,
+        keyword: state.search,
+        sort: state.sort
     }
 }
 const mapDispatchToProps = (dispatch, props) => {
