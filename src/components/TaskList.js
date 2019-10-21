@@ -1,6 +1,8 @@
 import React from 'react';
 import TaskItem from './TaskItem';
 import { connect } from 'react-redux';
+import * as actions from './../actions/index'
+
 
 class TaskList extends React.Component {
 
@@ -12,21 +14,24 @@ class TaskList extends React.Component {
         }
     }
 
-    onChange =(event)=>{
+    onChange = (event) => {
         let target = event.target;
         let value = target.value;
         let name = target.name;
-        this.props.onFilter(
-            name==='filterName'?value:this.state.filterName,
-            name==='filterStatus'?value:this.state.filterStatus
-        )
+        var filter = {
+            name: name === 'filterName'?value:this.state.filterName,
+            status: name ==='filterStatus'?value:this.state.filterStatus
+        };
+        this.props.onFilterTable(filter);
         this.setState({
             [name]: value
         });
     }
 
     render() {
-        const { tasks } = this.props;
+        const { tasks,filterTable } = this.props;
+        console.log(filterTable);
+        
         const elmTasks = tasks.map((item, index) => {
             return <TaskItem
                 key={item.id}
@@ -49,16 +54,16 @@ class TaskList extends React.Component {
                     <tr>
                         <td></td>
                         <td>
-                            <input 
-                                type="text" 
-                                className="form-control" 
+                            <input
+                                type="text"
+                                className="form-control"
                                 name="filterName"
                                 value={this.state.filterName}
                                 onChange={this.onChange}
                             />
                         </td>
                         <td>
-                            <select 
+                            <select
                                 className="form-control"
                                 name="filterStatus"
                                 value={this.state.filterStatus}
@@ -81,8 +86,16 @@ class TaskList extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        tasks: state.tasks
+        tasks: state.tasks,
+        filterTable: state.filterTable
     }
 }
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        onFilterTable: (filter) => {
+            dispatch(actions.filterTask(filter));
+        }
+    };
+};
 
-export default connect(mapStateToProps, null)(TaskList);
+export default connect(mapStateToProps, mapDispatchToProps)(TaskList);

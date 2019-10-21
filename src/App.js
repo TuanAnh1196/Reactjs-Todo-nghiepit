@@ -35,6 +35,7 @@ class App extends React.Component {
 
     onToggleForm = () => {
         this.props.onToggleForm(); 
+       
     }
    
     //find index to change status 
@@ -85,17 +86,10 @@ class App extends React.Component {
 
     render() {
         let {
-            taskEditting,
-            // filter,
-            // keyword, 
             sort
         } = this.state;
         var {isDisplayForm} = this.props;
 
-        const elmTaskForm = isDisplayForm === true ?
-            <TaskForm
-                task={taskEditting}
-            /> : '';
         return (
             <div className="container">
                 <div className="text-center">
@@ -104,7 +98,7 @@ class App extends React.Component {
                 </div>
                 <div className="row">
                     <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                        {elmTaskForm}
+                    <TaskForm />
                     </div>
                     <div className={isDisplayForm === true ? 'col-xs-8 col-sm-8 col-md-8 col-lg-8' :
                         'col-xs-12 col-sm-12 col-md-12 col-lg-12'}>
@@ -153,6 +147,9 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         onToggleForm: ()=>{
             dispatch(actions.toggleForm());
+        },
+        onClearTask: (task)=>{
+            dispatch(actions.editTask());
         },
         
     };
