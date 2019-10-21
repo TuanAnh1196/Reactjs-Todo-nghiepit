@@ -13,7 +13,7 @@ class TaskList extends React.Component {
             filtetStatus: -1 //all: -1, active: 1, deactive: 0
         }
     }
-
+    
     onChange = (event) => {
         let target = event.target;
         let value = target.value;
@@ -46,15 +46,28 @@ class TaskList extends React.Component {
             });
            
         }
-        
         //search 
         if(keyword){
             tasks = tasks.filter((task) => {
                 return task.name.toLowerCase().indexOf(keyword) !== -1;
             });
         } 
-
         //sort 
+        if(sort){
+            if(sort.by==='name'){
+                tasks.sort((a,b)=>{
+                    if(a.name > b.name) return sort.value;
+                    else if(a.name <b.name) return -sort.value;
+                    else return 0;
+                })
+            }else{
+                tasks.sort((a,b)=>{
+                    if(a.status > b.status) return -sort.value;
+                    else if(a.status <b.status) return sort.value;
+                    else return 0;
+                })
+            }
+        }
 
         const elmTasks = tasks.map((item, index) => {
             return <TaskItem

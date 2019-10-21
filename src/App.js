@@ -13,6 +13,14 @@ class App extends React.Component {
             taskEditting: null,
         }
     }
+
+    // onToggleForm = ()=>{
+    //     var {itemEditting} = this.props;
+    //     if(itemEditting && itemEditting!==''){
+    //         this.props.o
+    //     }
+    // }
+
     //tao du lieu dau 
     onGenerateData = () => {
         var tasks = [
